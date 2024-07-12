@@ -12,6 +12,7 @@ public class AVL {
 
         Node(int val) {
             this.val = val;
+            this.height = 0;
         }
     }
 
@@ -37,6 +38,43 @@ public class AVL {
 
         root.height = Math.max(height(root.left), height(root.right)) + 1;
         return rotate(root);
+    }
+
+    static Node delete(Node root, int val) {
+        if(val < root.val) {
+            root.left = delete(root.left, val);
+        }
+        else if(val > root.val) {
+            root.right = delete(root.right, val);
+        }
+        else {
+            // case 1 : Has No child
+            if(root.left == null && root.right == null) {
+                return null;
+            }
+
+            // case 2 : Has one child
+            if(root.left == null) {
+                return root.right;
+            }
+            if(root.right == null) {
+                return root.left;
+            }
+
+            // case 3 : Has two children
+            Node successorNode = successorFinder(root.right);
+            root.val = successorNode.val;
+            root.right = delete(root.right, successorNode.val);
+        }
+        root.height = Math.max(height(root.left), height(root.right)) + 1;
+        return rotate(root);
+    }
+
+    static Node successorFinder(Node node) {
+        while(node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 
     static public Node rotate(Node root) {
@@ -106,64 +144,23 @@ public class AVL {
             for (int i = 1; i < level-1; i++) {
                 System.out.print("|\t\t");
             }
-            System.out.println("|----->"+root.val);
+            System.out.println("|----->"+root.val+"("+root.height+")");
         }
         else {
-            System.out.println(root.val);
+            System.out.println(root.val+"("+root.height+")");
         }
         print(root.left, level+1);
     }
 
-    static Node delete(Node root, int val) {
-        if(val < root.val) {
-            root.left = delete(root.left, val);
-        }
-        if(val > root.val) {
-            root.right = delete(root.right, val);
-        }
-        else {
-            // case 1 : Has No child
-            if(root.left == null && root.right == null) {
-                return null;
-            }
-
-            // case 2 : Has one child
-            if(root.left == null) {
-                return root.right;
-            }
-            if(root.right == null) {
-                return root.left;
-            }
-
-            // case 3 : Has two children
-            Node successorNode = successorFinder(root.right);
-            root.val = successorNode.val;
-            root.right = delete(root.right, successorNode.val);
-            //return root;
-            root.height = Math.max(height(root.left), height(root.right)) + 1;
-        }
-        return rotate(root);
-    }
-
-    static Node successorFinder(Node node) {
-        while(node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-
     public static void main(String[] args) {
-        int[] nodes = {1,2,3,4,5,6};
+        int[] nodes = {1,2,3,4,5,6,7};
         Node root = null;
         for(int n : nodes) {
             root = insert(root, n);
         }
-
         print(root);
-        System.out.println();
-        System.out.println();
-        System.out.println();
         delete(root, 2);
+        System.out.println("======================================");
         print(root);
     }
 }
