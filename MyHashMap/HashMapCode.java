@@ -19,7 +19,7 @@ public class HashMapCode {
 
         private int n; // No. of nodes
         private int N; // Bucket length
-        private double loadFactor = 2;
+        private double loadFactor = 0.75;
         private LinkedList<Node> bucket[];
 
         @SuppressWarnings("unchecked") // Removes the warnings
@@ -50,12 +50,13 @@ public class HashMapCode {
         @SuppressWarnings("unchecked")
         private void reHash() {
             LinkedList<Node> oldbucket[] = bucket;
-            bucket = new LinkedList[N*2];
+            bucket = new LinkedList[bucket.length*2];
 
             for(int i = 0; i < bucket.length; i++) {
                 bucket[i] = new LinkedList<>();
             }
 
+            n = 0;
             for (LinkedList<Node> ll : oldbucket) {
                 for (Node node : ll) {
                     put(node.key, node.value);
@@ -75,8 +76,8 @@ public class HashMapCode {
                 node.value = value;
             }
 
-            double lambda = (double) n / N;
-            if(lambda > loadFactor) {
+            double lambda = (double) n / bucket.length;
+            if(lambda >= loadFactor) {
                 reHash();
             }
         }
@@ -129,20 +130,31 @@ public class HashMapCode {
             return keys;
         }
 
+        public int size() {
+            return n;
+        }
+
         public boolean isEmpty() {
             return n == 0;
         }
+
+        public float load() {
+            return (float) n / bucket.length;
+        }
+
     }
 
     public static void main(String[] args) {
         HashMap<String, Integer> mp = new HashMap<>();
         mp.put("India", 1);
         mp.put("USA", 2);
+        System.out.println("Load : "+mp.load());
         mp.put("Japan", 3);
         mp.put("Russia", 4);
         mp.put("China", 5);
 
-        System.out.println(mp.keySet());
-        System.out.println(mp.remove("China"));
+
+        System.out.println("Load : "+mp.load());
+        System.out.println("Test size : "+mp.size());
     }
 }
