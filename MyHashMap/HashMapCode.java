@@ -138,23 +138,16 @@ public class HashMapCode {
             return n == 0;
         }
 
-        public float load() {
-            return (float) n / bucket.length;
-        }
-
     }
 
     public static void main(String[] args) {
         HashMap<String, Integer> mp = new HashMap<>();
         mp.put("India", 1);
         mp.put("USA", 2);
-        System.out.println("Load : "+mp.load());
         mp.put("Japan", 3);
         mp.put("Russia", 4);
         mp.put("China", 5);
 
-
-        System.out.println("Load : "+mp.load());
         System.out.println("Test size : "+mp.size());
     }
 }
