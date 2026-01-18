@@ -106,7 +106,7 @@ public class Graph {
         createGraph(graph);
 
         // bfs(graph, v);
-        dfs(graph, 0, new boolean[v]);
+        // dfs(graph, 0, new boolean[v]);
 
         printAllPaths(graph,0, 5, new boolean[v], new ArrayList<Integer>());
     }
