@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Graph {
     static class Edge {
@@ -74,13 +75,37 @@ public class Graph {
         }
     }
 
+    static void printAllPaths(ArrayList<Edge>[] graph, int curr, int tar, boolean[] visited, List<Integer> path) {
+        
+        path.add(curr);
+        
+        if(curr == tar) {
+            System.out.println(path);
+            path.remove(path.size()-1);
+            return;
+        }
+
+        visited[curr] = true;
+        
+        for(Edge e : graph[curr]) {
+            if(!visited[e.dest]) {
+                printAllPaths(graph, e.dest, tar, visited, path);
+            }
+        }
+
+        visited[curr] = false; // backtrack
+        path.remove(path.size()-1); // backtrack
+    }
+
     public static void main(String[] args) {
         int v = 7;
 
         ArrayList<Edge>[] graph = new ArrayList[v];
         createGraph(graph);
 
-        bfs(graph, v);
-        dfs(graph, 0, new boolean[v]);
+        // bfs(graph, v);
+        // dfs(graph, 0, new boolean[v]);
+
+        printAllPaths(graph,0, 5, new boolean[v], new ArrayList<Integer>());
     }
 }
